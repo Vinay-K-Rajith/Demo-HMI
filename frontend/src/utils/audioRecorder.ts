@@ -78,8 +78,9 @@ export class AudioRecorder {
           throw err;
         }
       }
-      console.log('[AudioRecorder] Microphone access granted.');
-
+      if (!this.mediaStream) {
+        throw new Error('Failed to obtain media stream from microphone.');
+      }
       this.sourceNode = this.audioContext.createMediaStreamSource(this.mediaStream);
 
       console.log('[AudioRecorder] Loading AudioWorklet module from static URL /recorder-worklet.js...');

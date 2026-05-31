@@ -10,33 +10,60 @@ dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 dotenv.config();
 
-const app = express();
-app.use(cors());
-app.use(express.json());
+async function startServer() {
+  const app = express();
+  app.use(cors());
 
-const PORT = process.env.PORT || 5000;
-const server = http.createServer(app);
+  // Simple health check endpoint
+  app.get('/health', (req, res) => {
+    res.json({ status: 'ok', time: new Date() });
+  });
 
-// Simple health check endpoint
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', time: new Date() });
-});
+  const isProd = process.env.NODE_ENV === 'production';
+  let viteDevServer: any = null;
 
-// Create WebSocket server for the HMI dashboard client
-const wss = new WebSocketServer({ noServer: true });
+  const PORT = process.env.PORT || 5000;
+  const server = http.createServer(app);
 
-// Attach WS server to the HTTP server
-server.on('upgrade', (request, socket, head) => {
-  const pathname = new URL(request.url || '', `http://${request.headers.host}`).pathname;
-  
-  if (pathname === '/ws-live') {
-    wss.handleUpgrade(request, socket, head, (ws) => {
-      wss.emit('connection', ws, request);
+  if (isProd) {
+    const distPath = path.resolve(__dirname, '../../frontend/dist');
+    app.use(express.static(distPath));
+    app.get('*', (req, res, next) => {
+      if (req.url.startsWith('/health') || req.url.startsWith('/ws-live')) {
+        return next();
+      }
+      res.sendFile(path.resolve(distPath, 'index.html'));
     });
   } else {
-    socket.destroy();
+    console.log('[Server] Initializing Vite dev server in middleware mode...');
+    const { createServer: createViteServer } = await import('vite');
+    viteDevServer = await createViteServer({
+      server: {
+        middlewareMode: true,
+        hmr: { server } // Attach Vite HMR to our HTTP server
+      },
+      appType: 'spa',
+      root: path.resolve(__dirname, '../../frontend'),
+    });
+    app.use(viteDevServer.middlewares);
   }
-});
+
+  app.use(express.json());
+
+  // Create WebSocket server for the HMI dashboard client
+  const wss = new WebSocketServer({ noServer: true });
+
+  // Attach WS server to the HTTP server
+  server.on('upgrade', (request, socket, head) => {
+    const pathname = new URL(request.url || '', `http://${request.headers.host}`).pathname;
+    
+    if (pathname === '/ws-live') {
+      wss.handleUpgrade(request, socket, head, (ws) => {
+        wss.emit('connection', ws, request);
+      });
+    }
+    // Do not call socket.destroy() here to allow Vite's HMR websocket upgrades to connect
+  });
 
 wss.on('connection', (clientWs: WebSocket) => {
   console.log('[Server] HMI Client connected. Initializing Gemini Live session...');
@@ -156,6 +183,11 @@ You should call yourself Genie, your are life Jarvis.`
   });
 });
 
-server.listen(PORT, () => {
-  console.log(`[Server] Running HMI Monorepo backend on http://localhost:${PORT}`);
+  server.listen(PORT, () => {
+    console.log(`[Server] Running HMI Monorepo backend on http://localhost:${PORT}`);
+  });
+}
+
+startServer().catch((err) => {
+  console.error('[Server] Failed to start server:', err);
 });

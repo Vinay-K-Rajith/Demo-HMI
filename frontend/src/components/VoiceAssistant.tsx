@@ -396,7 +396,8 @@ export function VoiceAssistant({
     }
     audioRecorder.current.init();
 
-    const socket = new WebSocket('ws://localhost:5000/ws-live');
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const socket = new WebSocket(`${protocol}//localhost:5000/ws-live`);
     ws.current = socket;
 
     socket.onopen = () => {
