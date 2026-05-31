@@ -1,0 +1,37 @@
+<!-- @dsCard group="Components" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0}
+  body{background:var(--obsidian-800);padding:20px 30px;font-family:var(--font-ui);display:flex;gap:30px;align-items:center}
+  .gwrap{position:relative;width:200px;height:200px}
+  .center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .val{font-family:var(--font-display);font-weight:600;font-size:56px;color:var(--fg-1);font-variant-numeric:tabular-nums;line-height:1}
+  .u{font-family:var(--font-mono);font-size:12px;color:var(--fg-3);letter-spacing:.1em;margin-top:4px}
+  .legend .label{display:block;margin-bottom:6px}
+  .legend .sub{color:var(--fg-2);font-size:15px;max-width:240px;line-height:1.5}
+</style>
+</head>
+<body>
+  <div class="gwrap">
+    <svg width="200" height="200" viewBox="0 0 200 200">
+      <circle cx="100" cy="100" r="86" fill="none" stroke="#1a2230" stroke-width="14"/>
+      <circle cx="100" cy="100" r="86" fill="none" stroke="url(#g)" stroke-width="14"
+              transform="rotate(-90 100 100)"
+              stroke-linecap="round" stroke-dasharray="540" stroke-dashoffset="172"
+              style="filter:drop-shadow(0 0 6px var(--cyan-glow))"/>
+      <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#6cf3f8"/><stop offset="1" stop-color="#3d82ff"/>
+      </linearGradient></defs>
+    </svg>
+    <div class="center"><div class="val">128</div><div class="u">KM / H</div></div>
+  </div>
+  <div class="legend">
+    <span class="label">CIRCULAR GAUGE</span>
+    <span class="sub">Edge-lit arc, rounded cap, cyan→blue stroke with soft glow. Track in obsidian-500.</span>
+  </div>
+</body>
+</html>

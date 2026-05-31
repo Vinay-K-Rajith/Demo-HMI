@@ -1,0 +1,27 @@
+<!-- @dsCard group="Components" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0}
+  body{background:var(--obsidian-800);padding:26px 30px;font-family:var(--font-ui);display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  button{font-family:var(--font-ui);font-weight:600;font-size:15px;border-radius:var(--r-pill);padding:12px 24px;border:1px solid transparent;cursor:pointer;transition:all var(--dur-fast) var(--ease-out)}
+  .primary{background:var(--blue);color:#04060a;box-shadow:var(--glow-blue)}
+  .accent{background:var(--cyan);color:#04060a;box-shadow:var(--glow-cyan)}
+  .ghost{background:var(--obsidian-500);color:var(--fg-1);border-color:var(--line-3)}
+  .icon{width:48px;height:48px;border-radius:50%;background:var(--obsidian-500);border:1px solid var(--line-3);color:var(--fg-1);display:grid;place-items:center;padding:0}
+  .disabled{background:var(--obsidian-600);color:var(--fg-3);box-shadow:none}
+</style>
+</head>
+<body>
+  <button class="primary">Set destination</button>
+  <button class="accent">Engage</button>
+  <button class="ghost">Cancel</button>
+  <button class="icon"><i data-lucide="navigation"></i></button>
+  <button class="disabled" disabled>Unavailable</button>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

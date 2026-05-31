@@ -1,0 +1,32 @@
+<!-- @dsCard group="Components" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0}
+  body{background:var(--obsidian-800);padding:24px 30px;font-family:var(--font-ui)}
+  .card{position:relative;background:var(--glass-fill);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+        border:1px solid var(--line-2);border-radius:var(--r-lg);padding:18px 20px;width:380px;
+        box-shadow:var(--shadow-2);overflow:hidden}
+  .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  .gain{font-family:var(--font-mono);font-size:12px;color:var(--green)}
+  .big{font-family:var(--font-display);font-weight:600;font-size:34px;color:var(--fg-1);font-variant-numeric:tabular-nums}
+  .big small{font-family:var(--font-mono);font-size:14px;color:var(--fg-3);font-weight:500;margin-left:4px}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="top"><span class="label">EFFICIENCY</span><span class="gain">▲ +1.8 kWh regen</span></div>
+    <svg width="340" height="64" viewBox="0 0 340 64" preserveAspectRatio="none" style="display:block;margin-bottom:12px">
+      <defs><linearGradient id="fill" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="rgba(52,224,232,.35)"/><stop offset="1" stop-color="rgba(52,224,232,0)"/>
+      </linearGradient></defs>
+      <path d="M0 46 L40 38 L80 42 L120 24 L160 30 L200 16 L240 26 L280 12 L340 20" fill="none" stroke="#34e0e8" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M0 46 L40 38 L80 42 L120 24 L160 30 L200 16 L240 26 L280 12 L340 20 L340 64 L0 64 Z" fill="url(#fill)"/>
+    </svg>
+    <div class="big">4.2 <small>mi/kWh · last 50 km</small></div>
+  </div>
+</body>
+</html>

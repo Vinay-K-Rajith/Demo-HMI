@@ -1,0 +1,11 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="vmark" x1="28" y1="28" x2="92" y2="96" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6cf3f8"></stop>
+      <stop offset="1" stop-color="#3d82ff"></stop>
+    </linearGradient>
+  </defs>
+  <path d="M30 30 L60 92 L90 30" stroke="url(#vmark)" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+  
+  <path d="M64 50 L52 70 L60 70 L56 84 L72 60 L63 60 Z" fill="#34e0e8"></path>
+</svg>

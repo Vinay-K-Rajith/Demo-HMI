@@ -1,0 +1,11 @@
+<svg width="360" height="96" viewBox="0 0 360 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="vmark2" x1="24" y1="24" x2="72" y2="76" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6cf3f8"></stop>
+      <stop offset="1" stop-color="#3d82ff"></stop>
+    </linearGradient>
+  </defs>
+  <path d="M26 26 L48 72 L70 26" stroke="url(#vmark2)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" fill="none"></path>
+  <path d="M50 40 L41 55 L47 55 L44 66 L56 48 L49 48 Z" fill="#34e0e8"></path>
+  <text x="98" y="62" font-family="&#39;Space Grotesk&#39;, sans-serif" font-size="44" font-weight="600" letter-spacing="2" fill="#eaf1f7">VOLTA</text>
+</svg>

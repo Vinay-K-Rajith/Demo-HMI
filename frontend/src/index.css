@@ -1,0 +1,559 @@
+/* =====================================================================
+   VOLTA — HMI Design System v2
+   Premium dark-mode automotive cockpit: obsidian surfaces, electric accents.
+   Fonts: Space Grotesk (display + numerals), Sora (UI/body), JetBrains Mono.
+   ===================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --obsidian-900: #04060a;
+  --obsidian-800: #080b11;
+  --obsidian-700: #0d1219;
+  --obsidian-600: #131a24;
+  --obsidian-500: #1a2230;
+  --obsidian-400: #232d3d;
+  --glass-fill: rgba(26, 34, 48, 0.55);
+  --glass-fill-strong: rgba(26, 34, 48, 0.78);
+  --line-1: rgba(255, 255, 255, 0.06);
+  --line-2: rgba(255, 255, 255, 0.10);
+  --line-3: rgba(255, 255, 255, 0.16);
+  --fg-1: #eaf1f7;
+  --fg-2: #9ba8b8;
+  --fg-3: #5e6b7c;
+  --fg-inverse: #04060a;
+  --cyan: #34e0e8;
+  --cyan-bright: #6cf3f8;
+  --cyan-dim: #178c91;
+  --cyan-glow: rgba(52, 224, 232, 0.45);
+  --blue: #3d82ff;
+  --blue-bright: #6fa4ff;
+  --blue-dim: #2456b3;
+  --blue-glow: rgba(61, 130, 255, 0.40);
+  --amber: #ffb224;
+  --amber-bright: #ffc960;
+  --amber-dim: #b37a14;
+  --amber-glow: rgba(255, 178, 36, 0.40);
+  --green: #2fd79b;
+  --green-bright: #5fe8b8;
+  --green-dim: #1c8a63;
+  --green-glow: rgba(47, 215, 155, 0.38);
+  --red: #ff5470;
+  --red-bright: #ff8197;
+  --red-dim: #b32c43;
+  --red-glow: rgba(255, 84, 112, 0.40);
+  --accent: var(--cyan);
+  --action: var(--blue);
+  --ok: var(--green);
+  --warn: var(--amber);
+  --critical: var(--red);
+  --font-display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+  --font-ui:      'Sora', 'Segoe UI', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+  --t-mega:    96px;
+  --t-display: 64px;
+  --t-h1:      40px;
+  --t-h2:      30px;
+  --t-h3:      22px;
+  --t-body:    17px;
+  --t-label:   14px;
+  --t-caption: 12px;
+  --t-micro:   10.5px;
+  --lh-tight: 1.02;
+  --lh-snug:  1.18;
+  --lh-body:  1.5;
+  --tracking-mega: -0.03em;
+  --tracking-tight: -0.01em;
+  --tracking-label: 0.08em;
+  --tracking-wide:  0.18em;
+  --r-xs: 6px;
+  --r-sm: 10px;
+  --r-md: 16px;
+  --r-lg: 22px;
+  --r-xl: 30px;
+  --r-pill: 999px;
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+  --shadow-1: 0 1px 2px rgba(0,0,0,0.5);
+  --shadow-2: 0 8px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
+  --shadow-3: 0 20px 48px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.05);
+  --glow-cyan:  0 0 24px var(--cyan-glow);
+  --glow-blue:  0 0 24px var(--blue-glow);
+  --glow-amber: 0 0 20px var(--amber-glow);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 140ms;
+  --dur-base: 240ms;
+  --dur-slow: 480ms;
+}
+
+/* =====================================================================
+   GLOBAL RESET
+   ===================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: var(--font-ui);
+  background: var(--obsidian-900);
+  color: var(--fg-1);
+  overflow: hidden;
+  user-select: none;
+  /* Ambient atmospheric glow — subtle top and bottom highlights */
+  background-image:
+    radial-gradient(ellipse 90% 40% at 50% -5%, rgba(52,224,232,0.035) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 30% at 85% 105%, rgba(61,130,255,0.025) 0%, transparent 50%),
+    radial-gradient(ellipse 40% 30% at 15% 105%, rgba(52,224,232,0.015) 0%, transparent 50%);
+}
+
+/* =====================================================================
+   TYPOGRAPHY CLASSES
+   ===================================================================== */
+.t-mega {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--t-mega);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-mega);
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-1);
+}
+.t-display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--t-display);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-tight);
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-1);
+}
+h1, .h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--t-h1);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg-1);
+}
+h2, .h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--t-h2);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg-1);
+}
+h3, .h3 {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: var(--t-h3);
+  line-height: var(--lh-snug);
+  color: var(--fg-1);
+}
+p, .body {
+  font-family: var(--font-ui);
+  font-weight: 400;
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  color: var(--fg-2);
+}
+.label {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: var(--t-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--fg-2);
+}
+.eyebrow {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: var(--t-micro);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--cyan-dim);
+}
+.caption {
+  font-family: var(--font-ui);
+  font-weight: 400;
+  font-size: var(--t-caption);
+  letter-spacing: 0.02em;
+  color: var(--fg-3);
+}
+.mono, code {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: var(--t-caption);
+  letter-spacing: 0.02em;
+  color: var(--fg-2);
+  font-variant-numeric: tabular-nums;
+}
+.readout {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg-1);
+}
+
+/* =====================================================================
+   SCROLLBAR
+   ===================================================================== */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--obsidian-400); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--fg-3); }
+
+/* =====================================================================
+   PANELS — layered glass cockpit aesthetic
+   ===================================================================== */
+.panel {
+  background: var(--obsidian-700);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-md);
+  padding: var(--s-4);
+  position: relative;
+  overflow: hidden;
+  transition:
+    border-color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-slow) var(--ease-out);
+}
+
+/* Top-edge light catch — simulates glass reflection */
+.panel::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 8%; right: 8%;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent, rgba(255,255,255,0.08), transparent);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.panel:hover {
+  border-color: rgba(52,224,232,0.10);
+  box-shadow: 0 0 40px rgba(52,224,232,0.02);
+}
+
+.glass-panel {
+  background: var(--glass-fill-strong);
+  backdrop-filter: blur(24px) saturate(150%);
+  -webkit-backdrop-filter: blur(24px) saturate(150%);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-lg);
+  padding: var(--s-5);
+  position: relative;
+  overflow: hidden;
+}
+
+/* =====================================================================
+   INTERACTIVE ELEMENTS
+   ===================================================================== */
+.clickable {
+  transition: all var(--dur-fast) var(--ease-out);
+  cursor: pointer;
+}
+.clickable:hover { transform: translateY(-1px); }
+.clickable:active { transform: translateY(0); }
+
+button {
+  font-family: var(--font-ui);
+  cursor: pointer;
+}
+
+/* =====================================================================
+   CUSTOM RANGE SLIDER — replaces browser default
+   ===================================================================== */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 3px;
+  background: var(--obsidian-400);
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+  margin: 0;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--cyan);
+  border: 2px solid var(--obsidian-700);
+  box-shadow: 0 0 8px var(--cyan-glow), 0 1px 3px rgba(0,0,0,0.4);
+  cursor: pointer;
+  transition:
+    box-shadow var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 14px var(--cyan-glow), 0 1px 4px rgba(0,0,0,0.5);
+  transform: scale(1.2);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--cyan);
+  border: 2px solid var(--obsidian-700);
+  box-shadow: 0 0 8px var(--cyan-glow);
+  cursor: pointer;
+}
+
+input[type="range"]::-moz-range-track {
+  background: var(--obsidian-400);
+  height: 3px;
+  border-radius: 999px;
+  border: none;
+}
+
+/* =====================================================================
+   ARC GAUGE
+   ===================================================================== */
+.gauge-track {
+  fill: none;
+  stroke: var(--obsidian-500);
+  stroke-linecap: round;
+}
+
+.gauge-value {
+  fill: none;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.5s var(--ease-out);
+  filter: drop-shadow(0 0 8px var(--cyan-glow));
+}
+
+/* =====================================================================
+   BATTERY BAR — shell + fill
+   ===================================================================== */
+.battery-shell {
+  position: relative;
+  width: 100%;
+  height: 28px;
+  border: 2px solid var(--line-3);
+  border-radius: 7px;
+  padding: 3px;
+  display: flex;
+  align-items: center;
+}
+
+/* Positive terminal nub */
+.battery-shell::after {
+  content: "";
+  position: absolute;
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 12px;
+  background: var(--line-3);
+  border-radius: 0 3px 3px 0;
+}
+
+.battery-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.5s var(--ease-out), background 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* =====================================================================
+   GENIE VOICE ORB
+   ===================================================================== */
+.genie-orb {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 38%, var(--cyan-bright), var(--cyan) 50%, var(--cyan-dim) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow:
+    0 0 20px var(--cyan-glow),
+    inset 0 1px 2px rgba(255,255,255,0.3),
+    inset 0 -2px 4px rgba(0,0,0,0.2);
+  transition: all var(--dur-base) var(--ease-out);
+}
+
+/* Orbital ring around orb */
+.genie-orbit {
+  position: absolute;
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  border: 1px solid rgba(52,224,232,0.15);
+  pointer-events: none;
+}
+
+.genie-orbit-dot {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--cyan);
+  box-shadow: 0 0 4px var(--cyan-glow);
+}
+
+/* States */
+.genie-idle {
+  animation: orbBreathe 3s infinite var(--ease-in-out);
+}
+
+.genie-idle .genie-orbit {
+  animation: orbitSpin 8s linear infinite;
+}
+
+.genie-ready {
+  animation: orbBreathe 3s infinite var(--ease-in-out);
+}
+
+.genie-ready .genie-orbit {
+  animation: orbitSpin 6s linear infinite;
+}
+
+.genie-connecting {
+  opacity: 0.6;
+  animation: orbBreathe 1.5s infinite ease-in-out;
+}
+
+.genie-listening {
+  background: radial-gradient(circle at 38% 38%, #7ee834, var(--green) 50%, var(--green-dim) 100%);
+  box-shadow: 0 0 24px var(--green-glow), inset 0 1px 2px rgba(255,255,255,0.3);
+  animation: orbPulse 1.2s infinite ease-in-out;
+}
+
+.genie-listening .genie-orbit {
+  border-color: rgba(47,215,155,0.2);
+  animation: orbitSpin 3s linear infinite;
+}
+
+.genie-listening .genie-orbit-dot {
+  background: var(--green);
+  box-shadow: 0 0 4px var(--green-glow);
+}
+
+.genie-speaking {
+  animation: orbSpeak 0.6s infinite alternate var(--ease-in-out);
+  box-shadow: 0 0 30px var(--cyan-glow), inset 0 1px 2px rgba(255,255,255,0.3);
+}
+
+.genie-speaking .genie-orbit {
+  animation: orbitSpin 2s linear infinite;
+  border-color: rgba(52,224,232,0.25);
+}
+
+/* Pulse rings for speaking */
+.genie-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1px solid var(--cyan);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.genie-speaking .genie-ring:nth-child(1) {
+  animation: ringExpand 2s infinite linear;
+}
+.genie-speaking .genie-ring:nth-child(2) {
+  animation: ringExpand 2s infinite linear 1s;
+}
+
+/* =====================================================================
+   ANIMATIONS
+   ===================================================================== */
+@keyframes orbBreathe {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 16px rgba(52,224,232,0.2), inset 0 1px 2px rgba(255,255,255,0.3); }
+  50% { transform: scale(1.06); box-shadow: 0 0 28px rgba(52,224,232,0.45), inset 0 1px 2px rgba(255,255,255,0.3); }
+}
+
+@keyframes orbPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); box-shadow: 0 0 32px rgba(47,215,155,0.5), inset 0 1px 2px rgba(255,255,255,0.3); }
+}
+
+@keyframes orbSpeak {
+  0% { transform: scale(1.0); }
+  100% { transform: scale(1.07) translateY(-2px); }
+}
+
+@keyframes orbitSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes ringExpand {
+  0% { transform: scale(1); opacity: 0.45; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes statusBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.fade-in {
+  animation: fadeInUp 0.55s var(--ease-out) both;
+}
+
+/* =====================================================================
+   WAVEFORM BARS (compact, for status indicators)
+   ===================================================================== */
+.waveform {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 16px;
+}
+
+.wave-bar {
+  width: 2px;
+  height: 3px;
+  background-color: var(--cyan);
+  border-radius: 999px;
+  transition: height 0.1s ease;
+}
+
+.wave-active .wave-bar {
+  animation: waveBar 0.7s infinite alternate ease-in-out;
+}
+
+.wave-active .wave-bar:nth-child(1) { animation-delay: 0.05s; }
+.wave-active .wave-bar:nth-child(2) { animation-delay: 0.15s; }
+.wave-active .wave-bar:nth-child(3) { animation-delay: 0.25s; }
+.wave-active .wave-bar:nth-child(4) { animation-delay: 0.1s; }
+.wave-active .wave-bar:nth-child(5) { animation-delay: 0.2s; }
+
+@keyframes waveBar {
+  0% { height: 3px; }
+  100% { height: 14px; }
+}

@@ -1,0 +1,41 @@
+<!-- @dsCard group="Brand" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0}
+  body{background:var(--obsidian-800);padding:26px 30px;font-family:var(--font-ui)}
+  .grid{display:grid;grid-template-columns:repeat(8,1fr);gap:20px}
+  .ic{display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--fg-2)}
+  .ic i{width:26px;height:26px}
+  .ic span{font-family:var(--font-mono);font-size:8.5px;color:var(--fg-3)}
+  .ic.act{color:var(--cyan)}
+  .note{margin-top:18px;font-family:var(--font-mono);font-size:10px;color:var(--fg-3)}
+</style>
+</head>
+<body>
+  <div class="grid">
+    <div class="ic act"><i data-lucide="gauge"></i><span>gauge</span></div>
+    <div class="ic"><i data-lucide="battery-charging"></i><span>battery</span></div>
+    <div class="ic"><i data-lucide="zap"></i><span>zap</span></div>
+    <div class="ic"><i data-lucide="navigation"></i><span>nav</span></div>
+    <div class="ic"><i data-lucide="map"></i><span>map</span></div>
+    <div class="ic"><i data-lucide="route"></i><span>route</span></div>
+    <div class="ic"><i data-lucide="thermometer"></i><span>thermo</span></div>
+    <div class="ic"><i data-lucide="wind"></i><span>wind</span></div>
+    <div class="ic"><i data-lucide="disc"></i><span>tire</span></div>
+    <div class="ic"><i data-lucide="car-front"></i><span>car</span></div>
+    <div class="ic"><i data-lucide="signal"></i><span>signal</span></div>
+    <div class="ic"><i data-lucide="music"></i><span>media</span></div>
+    <div class="ic"><i data-lucide="phone"></i><span>phone</span></div>
+    <div class="ic"><i data-lucide="settings"></i><span>settings</span></div>
+    <div class="ic"><i data-lucide="sun"></i><span>climate</span></div>
+    <div class="ic"><i data-lucide="chevron-right"></i><span>chevron</span></div>
+  </div>
+  <div class="note">Lucide · 2px stroke · rounded · fg-2 at rest, accent when active — substitution, see README</div>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>lucide.createIcons();</script>
+</body>
+</html>

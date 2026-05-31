@@ -1,0 +1,25 @@
+<!-- @dsCard group="Colors" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0}
+  body{background:var(--obsidian-800);padding:24px 30px;font-family:var(--font-mono)}
+  .grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+  .sw{height:84px;border-radius:var(--r-md);display:flex;flex-direction:column;justify-content:flex-end;padding:10px}
+  .n{font-size:11px;color:#04060a;font-weight:700}
+  .hex{font-size:9.5px;color:rgba(4,6,10,.65);font-weight:600}
+</style>
+</head>
+<body>
+  <div class="grid">
+    <div class="sw" style="background:var(--cyan);box-shadow:var(--glow-cyan)"><span class="n">CYAN</span><span class="hex">#34e0e8</span></div>
+    <div class="sw" style="background:var(--blue);box-shadow:var(--glow-blue)"><span class="n">BLUE</span><span class="hex">#3d82ff</span></div>
+    <div class="sw" style="background:var(--amber);box-shadow:var(--glow-amber)"><span class="n">AMBER</span><span class="hex">#ffb224</span></div>
+    <div class="sw" style="background:var(--green)"><span class="n">GREEN</span><span class="hex">#2fd79b</span></div>
+    <div class="sw" style="background:var(--red)"><span class="n">RED</span><span class="hex">#ff5470</span></div>
+  </div>
+</body>
+</html>

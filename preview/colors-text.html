@@ -1,0 +1,24 @@
+<!-- @dsCard group="Colors" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0}
+  body{background:var(--obsidian-800);padding:22px 30px;font-family:var(--font-ui)}
+  .row{display:flex;gap:14px}
+  .sw{flex:1;background:var(--obsidian-600);border:1px solid var(--line-2);border-radius:var(--r-md);padding:14px 16px}
+  .dot{width:18px;height:18px;border-radius:50%;margin-bottom:10px}
+  .name{font-size:15px;font-weight:600;margin-bottom:2px}
+  .hex{font-family:var(--font-mono);font-size:10.5px;color:var(--fg-3)}
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="sw"><div class="dot" style="background:var(--fg-1)"></div><div class="name" style="color:var(--fg-1)">fg-1</div><div class="hex">#eaf1f7 · primary</div></div>
+    <div class="sw"><div class="dot" style="background:var(--fg-2)"></div><div class="name" style="color:var(--fg-2)">fg-2</div><div class="hex">#9ba8b8 · secondary</div></div>
+    <div class="sw"><div class="dot" style="background:var(--fg-3)"></div><div class="name" style="color:var(--fg-3)">fg-3</div><div class="hex">#5e6b7c · tertiary</div></div>
+  </div>
+</body>
+</html>

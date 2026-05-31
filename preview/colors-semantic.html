@@ -1,0 +1,26 @@
+<!-- @dsCard group="Colors" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0}
+  body{background:var(--obsidian-800);padding:22px 30px;font-family:var(--font-ui)}
+  .row{display:flex;gap:12px;flex-wrap:wrap}
+  .chip{display:flex;align-items:center;gap:9px;background:var(--obsidian-600);border:1px solid var(--line-2);border-radius:var(--r-pill);padding:8px 16px 8px 12px}
+  .led{width:10px;height:10px;border-radius:50%}
+  .lab{font-size:13px;color:var(--fg-1);font-weight:500}
+  .use{font-family:var(--font-mono);font-size:10px;color:var(--fg-3)}
+</style>
+</head>
+<body>
+  <div class="row">
+    <div class="chip"><span class="led" style="background:var(--cyan);box-shadow:0 0 8px var(--cyan)"></span><span class="lab">accent</span><span class="use">live signal / active</span></div>
+    <div class="chip"><span class="led" style="background:var(--blue);box-shadow:0 0 8px var(--blue)"></span><span class="lab">action</span><span class="use">primary / route</span></div>
+    <div class="chip"><span class="led" style="background:var(--green)"></span><span class="lab">ok</span><span class="use">regen / nominal</span></div>
+    <div class="chip"><span class="led" style="background:var(--amber)"></span><span class="lab">warn</span><span class="use">attention</span></div>
+    <div class="chip"><span class="led" style="background:var(--red)"></span><span class="lab">critical</span><span class="use">alert</span></div>
+  </div>
+</body>
+</html>

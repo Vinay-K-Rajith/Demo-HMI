@@ -1,0 +1,45 @@
+<!-- @dsCard group="Components" -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0}
+  body{background:var(--obsidian-800);padding:22px 30px;font-family:var(--font-ui);display:flex;gap:24px;justify-content:center}
+  .ring{text-align:center}
+  svg{display:block}
+  .rw{position:relative;width:120px;height:120px}
+  .rc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .rv{font-family:var(--font-display);font-weight:600;font-size:24px;color:var(--fg-1);font-variant-numeric:tabular-nums}
+  .rl{font-family:var(--font-mono);font-size:9.5px;color:var(--fg-3);letter-spacing:.06em;text-transform:uppercase}
+  .cap{font-size:13px;color:var(--fg-2);margin-top:6px}
+</style>
+</head>
+<body>
+  <div class="ring">
+    <div class="rw">
+      <svg width="120" height="120"><circle cx="60" cy="60" r="50" fill="none" stroke="#1a2230" stroke-width="9"/>
+        <circle cx="60" cy="60" r="50" fill="none" stroke="var(--green)" stroke-width="9" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="63" transform="rotate(-90 60 60)"/></svg>
+      <div class="rc"><div class="rv">80<span style="font-size:13px;color:var(--fg-3)">%</span></div><div class="rl">Tire FL</div></div>
+    </div>
+    <div class="cap">2.4 bar</div>
+  </div>
+  <div class="ring">
+    <div class="rw">
+      <svg width="120" height="120"><circle cx="60" cy="60" r="50" fill="none" stroke="#1a2230" stroke-width="9"/>
+        <circle cx="60" cy="60" r="50" fill="none" stroke="var(--amber)" stroke-width="9" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="145" transform="rotate(-90 60 60)"/></svg>
+      <div class="rc"><div class="rv">61<span style="font-size:13px;color:var(--fg-3)">°</span></div><div class="rl">Motor T</div></div>
+    </div>
+    <div class="cap">nominal</div>
+  </div>
+  <div class="ring">
+    <div class="rw">
+      <svg width="120" height="120"><circle cx="60" cy="60" r="50" fill="none" stroke="#1a2230" stroke-width="9"/>
+        <circle cx="60" cy="60" r="50" fill="none" stroke="var(--cyan)" stroke-width="9" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="38" transform="rotate(-90 60 60)"/></svg>
+      <div class="rc"><div class="rv">88<span style="font-size:13px;color:var(--fg-3)">%</span></div><div class="rl">Thermal</div></div>
+    </div>
+    <div class="cap">optimal</div>
+  </div>
+</body>
+</html>

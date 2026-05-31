@@ -1,0 +1,236 @@
+/* =====================================================================
+   VOLTA — Design System Foundations
+   Color + Type tokens for a next-generation EV vehicle interface (HMI)
+   Dark-mode automotive cockpit: obsidian surfaces, electric accents.
+   ---------------------------------------------------------------------
+   Import fonts (substitution — see README "Fonts"):
+   Space Grotesk (display + numerals), Sora (UI/body), JetBrains Mono.
+   ===================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  /* ---------------------------------------------------------------
+     SURFACES — obsidian stack, deepest → most elevated
+     The cockpit is near-black; depth comes from subtle steps + glass.
+     --------------------------------------------------------------- */
+  --obsidian-900: #04060a;   /* void — behind everything */
+  --obsidian-800: #080b11;   /* app/screen base */
+  --obsidian-700: #0d1219;   /* panel */
+  --obsidian-600: #131a24;   /* card */
+  --obsidian-500: #1a2230;   /* elevated card / hover */
+  --obsidian-400: #232d3d;   /* control track / inset */
+
+  /* Glass: layered over surfaces with backdrop-blur */
+  --glass-fill: rgba(26, 34, 48, 0.55);
+  --glass-fill-strong: rgba(26, 34, 48, 0.78);
+
+  /* Hairlines & borders (over dark) */
+  --line-1: rgba(255, 255, 255, 0.06);  /* faint divider */
+  --line-2: rgba(255, 255, 255, 0.10);  /* card border */
+  --line-3: rgba(255, 255, 255, 0.16);  /* control border */
+
+  /* ---------------------------------------------------------------
+     TEXT — cool near-white → muted slate
+     --------------------------------------------------------------- */
+  --fg-1: #eaf1f7;   /* primary text, large numerals */
+  --fg-2: #9ba8b8;   /* secondary labels */
+  --fg-3: #5e6b7c;   /* tertiary / disabled / axis */
+  --fg-inverse: #04060a;  /* text on accent fills */
+
+  /* ---------------------------------------------------------------
+     ACCENTS — the electric signal palette
+     Cyan = primary live signal. Blue = action / navigation route.
+     Amber = attention. Green = regen / nominal. Red = critical.
+     --------------------------------------------------------------- */
+  --cyan: #34e0e8;          /* primary signal / active */
+  --cyan-bright: #6cf3f8;   /* glow highlight */
+  --cyan-dim: #178c91;      /* low-emphasis cyan */
+  --cyan-glow: rgba(52, 224, 232, 0.45);
+
+  --blue: #3d82ff;          /* primary action, route line */
+  --blue-bright: #6fa4ff;
+  --blue-dim: #2456b3;
+  --blue-glow: rgba(61, 130, 255, 0.40);
+
+  --amber: #ffb224;         /* attention / warning */
+  --amber-bright: #ffc960;
+  --amber-dim: #b37a14;
+  --amber-glow: rgba(255, 178, 36, 0.40);
+
+  --green: #2fd79b;         /* regen / nominal / OK */
+  --green-bright: #5fe8b8;
+  --green-dim: #1c8a63;
+  --green-glow: rgba(47, 215, 155, 0.38);
+
+  --red: #ff5470;           /* critical / alert */
+  --red-bright: #ff8197;
+  --red-dim: #b32c43;
+  --red-glow: rgba(255, 84, 112, 0.40);
+
+  /* Semantic aliases */
+  --accent: var(--cyan);
+  --action: var(--blue);
+  --ok: var(--green);
+  --warn: var(--amber);
+  --critical: var(--red);
+
+  /* ---------------------------------------------------------------
+     TYPOGRAPHY
+     --------------------------------------------------------------- */
+  --font-display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+  --font-ui:      'Sora', 'Segoe UI', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+
+  /* Type scale — built around in-car legibility (large minimums) */
+  --t-mega:    96px;  /* the big speed numeral */
+  --t-display: 64px;  /* hero / range readout */
+  --t-h1:      40px;
+  --t-h2:      30px;
+  --t-h3:      22px;
+  --t-body:    17px;
+  --t-label:   14px;  /* control labels */
+  --t-caption: 12px;  /* units, axis ticks */
+  --t-micro:   10.5px;/* legal / fine telemetry id */
+
+  --lh-tight: 1.02;
+  --lh-snug:  1.18;
+  --lh-body:  1.5;
+
+  --tracking-mega: -0.03em;
+  --tracking-tight: -0.01em;
+  --tracking-label: 0.08em;   /* uppercase labels */
+  --tracking-wide:  0.18em;   /* tiny all-caps eyebrows */
+
+  /* ---------------------------------------------------------------
+     RADII — cockpit panels are softly rounded, controls pill/round
+     --------------------------------------------------------------- */
+  --r-xs: 6px;
+  --r-sm: 10px;
+  --r-md: 16px;
+  --r-lg: 22px;
+  --r-xl: 30px;
+  --r-pill: 999px;
+
+  /* ---------------------------------------------------------------
+     SPACING — 4px base grid
+     --------------------------------------------------------------- */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 24px;
+  --s-6: 32px;
+  --s-7: 48px;
+  --s-8: 64px;
+
+  /* ---------------------------------------------------------------
+     ELEVATION — depth on dark = darker drop + faint top light
+     Glow shadows used for active/accent states.
+     --------------------------------------------------------------- */
+  --shadow-1: 0 1px 2px rgba(0,0,0,0.5);
+  --shadow-2: 0 8px 24px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
+  --shadow-3: 0 20px 48px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.05);
+  --glow-cyan:  0 0 24px var(--cyan-glow);
+  --glow-blue:  0 0 24px var(--blue-glow);
+  --glow-amber: 0 0 20px var(--amber-glow);
+
+  /* ---------------------------------------------------------------
+     MOTION
+     --------------------------------------------------------------- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 140ms;
+  --dur-base: 240ms;
+  --dur-slow: 480ms;
+}
+
+/* =====================================================================
+   SEMANTIC TYPOGRAPHY CLASSES
+   ===================================================================== */
+.t-mega {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--t-mega);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-mega);
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-1);
+}
+.t-display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--t-display);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--tracking-tight);
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-1);
+}
+h1, .h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--t-h1);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg-1);
+}
+h2, .h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: var(--t-h2);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg-1);
+}
+h3, .h3 {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: var(--t-h3);
+  line-height: var(--lh-snug);
+  color: var(--fg-1);
+}
+p, .body {
+  font-family: var(--font-ui);
+  font-weight: 400;
+  font-size: var(--t-body);
+  line-height: var(--lh-body);
+  color: var(--fg-2);
+}
+.label {
+  font-family: var(--font-ui);
+  font-weight: 600;
+  font-size: var(--t-label);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--fg-2);
+}
+.eyebrow {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: var(--t-caption);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--cyan);
+}
+.caption {
+  font-family: var(--font-ui);
+  font-weight: 400;
+  font-size: var(--t-caption);
+  letter-spacing: 0.02em;
+  color: var(--fg-3);
+}
+.mono, code {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: var(--t-caption);
+  letter-spacing: 0.02em;
+  color: var(--fg-2);
+  font-variant-numeric: tabular-nums;
+}
+.readout {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg-1);
+}
