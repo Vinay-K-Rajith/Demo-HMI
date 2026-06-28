@@ -108,6 +108,11 @@ wss.on('connection', (clientWs: WebSocket) => {
             }
           }
         },
+        // Enable native speech-to-text transcripts (additive — does not affect audio output).
+        // inputAudioTranscription: transcribes the driver's speech (arrives as a complete message).
+        // outputAudioTranscription: transcribes Genie's spoken reply (streams word-by-word).
+        inputAudioTranscription: {},
+        outputAudioTranscription: {},
         systemInstruction: {
           parts: [
             {

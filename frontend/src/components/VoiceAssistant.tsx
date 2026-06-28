@@ -5,7 +5,7 @@ import { AudioRecorder } from '../utils/audioRecorder';
 import { AudioPlayer } from '../utils/audioPlayer';
 
 interface TranscriptItem {
-  speaker: 'Genie' | 'System';
+  speaker: 'Genie' | 'System' | 'You';
   text: string;
 }
 
@@ -241,9 +241,18 @@ export function VoiceAssistant({
   const [connected, setConnected] = useState(false);
   const [status, setStatus] = useState<'idle' | 'connecting' | 'listening' | 'speaking' | 'ready'>('idle');
   const [isMuted, setIsMuted] = useState(false);
-  const [transcript, setTranscript] = useState<TranscriptItem[]>([]);
+  const [transcript, setTranscript] = useState<TranscriptItem[]>(() => {
+    try { return JSON.parse(localStorage.getItem('genie-transcript') || '[]'); }
+    catch { return []; }
+  });
   const [genieText, setGenieText] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
+
+  // Persist the dialog log so it survives reloads / turn changes.
+  useEffect(() => {
+    try { localStorage.setItem('genie-transcript', JSON.stringify(transcript.slice(-40))); }
+    catch { /* storage full / unavailable — ignore */ }
+  }, [transcript]);
 
   const ws = useRef<WebSocket | null>(null);
   const audioRecorder = useRef<AudioRecorder | null>(null);
@@ -373,6 +382,16 @@ export function VoiceAssistant({
     }));
   };
 
+  // Commit the in-progress Genie reply to the dialog log, then clear the buffer.
+  const flushGenie = (suffix = '') => {
+    const text = currentGenieText.current.trim();
+    if (text) {
+      setTranscript(p => [...p.slice(-40), { speaker: 'Genie', text: text + suffix }]);
+    }
+    currentGenieText.current = '';
+    setGenieText('');
+  };
+
   // ─── WebSocket Connection ───────────────────────────────────────
   const connectGenie = () => {
     if (connected) return;
@@ -414,14 +433,26 @@ export function VoiceAssistant({
         const data = JSON.parse(event.data);
         if (data.error) { setErrorMsg(data.error); disconnectGenie(); return; }
         if (data.serverContent) {
+          // Driver speech transcript (native STT). Arrives as a complete message,
+          // so we commit it straight to the dialog log as a "You" entry.
+          if (data.serverContent.inputTranscription?.text) {
+            const userText = data.serverContent.inputTranscription.text.trim();
+            // Flush any pending Genie reply first (covers transcript that streamed
+            // in AFTER turnComplete and would otherwise be overwritten by this turn).
+            flushGenie();
+            if (userText) {
+              setTranscript(p => [...p.slice(-40), { speaker: 'You', text: userText }]);
+            }
+          }
+          // Genie speech transcript (native STT of the audio reply). Streams word-by-word.
+          if (data.serverContent.outputTranscription?.text) {
+            currentGenieText.current += data.serverContent.outputTranscription.text;
+            setGenieText(currentGenieText.current);
+          }
           if (data.serverContent.interrupted) {
             audioPlayer.current?.stop();
             setStatus('listening');
-            if (currentGenieText.current.trim()) {
-              setTranscript(p => [...p.slice(-20), { speaker: 'Genie', text: currentGenieText.current + '…' }]);
-            }
-            currentGenieText.current = '';
-            setGenieText('');
+            flushGenie('…');
           }
           if (data.serverContent.modelTurn) {
             setStatus('speaking');
@@ -432,11 +463,7 @@ export function VoiceAssistant({
           }
           if (data.serverContent.turnComplete) {
             setStatus('ready');
-            if (currentGenieText.current.trim()) {
-              setTranscript(p => [...p.slice(-20), { speaker: 'Genie', text: currentGenieText.current }]);
-            }
-            currentGenieText.current = '';
-            setGenieText('');
+            flushGenie();
           }
         }
       } catch (_e) { /* ignore parse errors */ }
@@ -635,23 +662,42 @@ export function VoiceAssistant({
           border: '1px solid var(--line-1)', padding: 8,
           display: 'flex', flexDirection: 'column', gap: 6,
         }}>
-          {transcript.length === 0 ? (
+          {transcript.length === 0 && !genieText ? (
             <div style={{ color: 'var(--fg-3)', fontSize: 11, textAlign: 'center', margin: 'auto' }}>
               No cockpit dialog yet
             </div>
           ) : (
-            transcript.map((item, i) => (
-              <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                <span className="mono" style={{ fontSize: 8, color: 'var(--cyan-dim)', marginBottom: 1 }}>
-                  {item.speaker.toUpperCase()}
-                </span>
-                <span style={{
-                  background: 'var(--obsidian-700)', border: '1px solid var(--line-1)',
-                  borderRadius: 'var(--r-xs)', padding: '4px 8px',
-                  fontSize: 11, color: 'var(--fg-1)', maxWidth: '92%', wordBreak: 'break-word', lineHeight: 1.4,
-                }}>{item.text}</span>
-              </div>
-            ))
+            transcript.map((item, i) => {
+              const isUser = item.speaker === 'You';
+              return (
+                <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: isUser ? 'flex-end' : 'flex-start' }}>
+                  <span className="mono" style={{ fontSize: 8, color: isUser ? 'var(--green-dim)' : 'var(--cyan-dim)', marginBottom: 1 }}>
+                    {item.speaker.toUpperCase()}
+                  </span>
+                  <span style={{
+                    background: isUser ? 'rgba(47,215,155,0.06)' : 'var(--obsidian-700)',
+                    border: `1px solid ${isUser ? 'rgba(47,215,155,0.15)' : 'var(--line-1)'}`,
+                    borderRadius: 'var(--r-xs)', padding: '4px 8px',
+                    fontSize: 11, color: 'var(--fg-1)', maxWidth: '92%', wordBreak: 'break-word', lineHeight: 1.4,
+                  }}>{item.text}</span>
+                </div>
+              );
+            })
+          )}
+
+          {/* Live, in-progress Genie transcription (streams word-by-word, small font) */}
+          {genieText && (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+              <span className="mono" style={{ fontSize: 8, color: 'var(--cyan-dim)', marginBottom: 1 }}>
+                GENIE
+              </span>
+              <span style={{
+                background: 'var(--obsidian-700)', border: '1px dashed var(--cyan-dim)',
+                borderRadius: 'var(--r-xs)', padding: '4px 8px',
+                fontSize: 10, color: 'var(--fg-2)', fontStyle: 'italic',
+                maxWidth: '92%', wordBreak: 'break-word', lineHeight: 1.4,
+              }}>{genieText}<span style={{ opacity: 0.6 }}>▍</span></span>
+            </div>
           )}
           <div ref={transcriptEndRef} />
         </div>
