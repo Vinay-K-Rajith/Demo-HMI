@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence, animate, Variants } from 'framer-motion';
 import {
   AlertTriangle, Battery, ChevronRight, ClipboardCheck, ClipboardList,
@@ -242,7 +243,66 @@ const ALERTS = [
   { icon: Scale, color: 'var(--cyan)', text: 'Weigh station ahead in 18 miles', time: '10:05 AM' },
 ];
 
+function AllAlertsModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  return createPortal(
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          onClick={onClose}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 100,
+            background: 'rgba(4,6,10,0.72)', backdropFilter: 'blur(6px)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24,
+          }}>
+          <motion.div
+            initial={{ scale: 0.94, y: 12 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.96, y: 8 }}
+            transition={{ type: 'spring', stiffness: 280, damping: 26 }}
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              width: 'min(560px, 92vw)', maxHeight: '80vh', display: 'flex', flexDirection: 'column',
+              background: 'var(--obsidian-700)', border: '1px solid var(--line-2)',
+              borderRadius: 'var(--r-lg)', padding: 'var(--s-5)', boxShadow: '0 24px 60px rgba(0,0,0,0.55)',
+            }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <span style={{ fontSize: 18, fontWeight: 600, fontFamily: 'var(--font-display)' }}>All Alerts</span>
+                <span style={{
+                  background: 'var(--red)', color: '#fff', borderRadius: 'var(--r-pill)',
+                  minWidth: 20, height: 20, fontSize: 11, fontWeight: 700, display: 'flex',
+                  alignItems: 'center', justifyContent: 'center', padding: '0 6px',
+                }}>{ALERTS.length}</span>
+              </div>
+              <button onClick={onClose} className="clickable" style={{
+                border: '1px solid var(--line-2)', background: 'var(--obsidian-600)', color: 'var(--fg-2)',
+                borderRadius: 'var(--r-xs)', width: 30, height: 30, cursor: 'pointer', fontSize: 15, lineHeight: 1,
+              }}>✕</button>
+            </div>
+            <div style={{ overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 8, minHeight: 0 }}>
+              {ALERTS.map((a) => {
+                const Icon = a.icon;
+                return (
+                  <div key={a.text} style={{
+                    display: 'flex', alignItems: 'center', gap: 12, padding: '12px 14px',
+                    background: 'var(--obsidian-900)', border: '1px solid var(--line-1)', borderRadius: 'var(--r-sm)',
+                  }}>
+                    <Icon size={18} color={a.color} style={{ flexShrink: 0 }} />
+                    <div style={{ flex: 1, minWidth: 0, fontSize: 13, lineHeight: 1.4 }}>{a.text}</div>
+                    <span className="mono" style={{ fontSize: 10, color: 'var(--fg-3)', flexShrink: 0 }}>{a.time}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>,
+    document.body,
+  );
+}
+
 function Alerts() {
+  const [showAll, setShowAll] = useState(false);
   return (
     <TiltCard variants={slideUp} style={{ flex: 1, minHeight: 0 }}>
       <SectionTitle right={
@@ -252,9 +312,12 @@ function Alerts() {
             minWidth: 18, height: 18, fontSize: 10, fontWeight: 700, display: 'flex',
             alignItems: 'center', justifyContent: 'center', padding: '0 5px',
           }}>{ALERTS.length}</span>
-          <span className="mono clickable" style={{ fontSize: 9, color: 'var(--cyan)' }}>VIEW ALL</span>
+          <span className="mono clickable" onClick={() => setShowAll(true)}
+            style={{ fontSize: 9, color: 'var(--cyan)', cursor: 'pointer' }}>VIEW ALL</span>
         </span>
       }>ALERTS</SectionTitle>
+
+      <AllAlertsModal open={showAll} onClose={() => setShowAll(false)} />
       <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: 6, minHeight: 0 }}>
         {ALERTS.map((a, i) => {
           const Icon = a.icon;
@@ -264,18 +327,16 @@ function Alerts() {
               initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.15 + i * 0.06 }}
               style={{
-                display: 'flex', alignItems: 'center', gap: 10, padding: '8px 9px',
+                display: 'flex', alignItems: 'flex-start', gap: 10, padding: '9px 10px',
                 background: 'var(--obsidian-900)', border: '1px solid var(--line-1)',
                 borderRadius: 'var(--r-sm)', cursor: 'pointer',
               }}>
-              <Icon size={16} color={a.color} style={{ flexShrink: 0 }} />
+              <Icon size={16} color={a.color} style={{ flexShrink: 0, marginTop: 1 }} />
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 12, lineHeight: 1.35 }}>{a.text}</div>
+                <span className="mono" style={{ fontSize: 9, color: 'var(--fg-3)', display: 'block', marginTop: 4 }}>{a.time}</span>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 2, flexShrink: 0 }}>
-                <span className="mono" style={{ fontSize: 9, color: 'var(--fg-3)' }}>{a.time}</span>
-                <ChevronRight size={13} color="var(--fg-3)" />
-              </div>
+              <ChevronRight size={14} color="var(--fg-3)" style={{ flexShrink: 0, marginTop: 1 }} />
             </motion.div>
           );
         })}
