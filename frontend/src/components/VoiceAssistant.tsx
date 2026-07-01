@@ -281,106 +281,133 @@ export function VoiceAssistant({
     telemetryRef.current = { speed, battery, range, engaged, gear, temp, musicTrack };
   }, [speed, battery, range, engaged, gear, temp, musicTrack]);
 
-  // ─── Canvas Drawing (what Genie "sees") ─────────────────────────
+  // ─── Canvas Drawing (a faithful mirror of the ELD dashboard Genie "sees") ───
   const drawTelemetryCanvas = () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
     const t = telemetryRef.current;
+    const W = canvas.width;
 
+    // Background
     ctx.fillStyle = '#04060a';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect(0, 0, W, canvas.height);
 
-    // Grid
-    ctx.strokeStyle = 'rgba(52,224,232,0.02)';
-    ctx.lineWidth = 1;
-    for (let i = 0; i < canvas.width; i += 40) { ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height); ctx.stroke(); }
-    for (let j = 0; j < canvas.height; j += 40) { ctx.beginPath(); ctx.moveTo(0, j); ctx.lineTo(canvas.width, j); ctx.stroke(); }
+    const panel = (x: number, y: number, w: number, h: number) => {
+      ctx.fillStyle = '#0d1219';
+      ctx.fillRect(x, y, w, h);
+      ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(x, y, w, h);
+    };
+    const label = (text: string, x: number, y: number) => {
+      ctx.fillStyle = '#9ba8b8';
+      ctx.font = 'bold 11px sans-serif';
+      ctx.fillText(text, x, y);
+    };
 
+    // ── Header ──
     ctx.fillStyle = '#34e0e8';
-    ctx.font = 'bold 20px "Space Grotesk", sans-serif';
-    ctx.fillText('VOLTA VEHICLE TELEMETRY', 25, 40);
-
-    ctx.fillStyle = '#5e6b7c';
-    ctx.font = '12px monospace';
-    ctx.fillText(`GEAR: [${t.gear}]  ADAS: [${t.engaged ? 'ENGAGED' : 'STANDBY'}]  CABIN: ${t.temp}°C`, 25, 60);
-
-    // Speed
-    ctx.fillStyle = '#131a24';
-    ctx.fillRect(25, 80, 170, 100);
-    ctx.strokeStyle = 'rgba(255,255,255,0.08)';
-    ctx.strokeRect(25, 80, 170, 100);
-    ctx.fillStyle = '#9ba8b8';
-    ctx.font = 'bold 10px sans-serif';
-    ctx.fillText('SPEED', 38, 100);
+    ctx.font = 'bold 18px "Space Grotesk", sans-serif';
+    ctx.fillText('ELD DRIVER DASHBOARD', 20, 28);
     ctx.fillStyle = '#eaf1f7';
-    ctx.font = '600 44px "Space Grotesk", sans-serif';
-    ctx.fillText(String(t.speed), 38, 155);
-    ctx.fillStyle = '#5e6b7c';
-    ctx.font = '12px sans-serif';
-    ctx.fillText('km/h', 125, 155);
-
-    // Battery
-    ctx.fillStyle = '#131a24';
-    ctx.fillRect(210, 80, 170, 100);
-    ctx.strokeRect(210, 80, 170, 100);
+    ctx.font = '600 14px sans-serif';
+    ctx.fillText('Michael Turner  ·  TRK-214', 20, 50);
+    ctx.fillStyle = '#2fd79b';
+    ctx.font = 'bold 13px monospace';
+    ctx.fillText('● DRIVING', W - 105, 28);
     ctx.fillStyle = '#9ba8b8';
-    ctx.font = 'bold 10px sans-serif';
-    ctx.fillText('BATTERY SoC', 223, 100);
-    ctx.fillStyle = t.battery > 20 ? '#2fd79b' : '#ff5470';
-    ctx.font = '600 44px "Space Grotesk", sans-serif';
-    ctx.fillText(`${t.battery}%`, 223, 155);
+    ctx.font = '13px sans-serif';
+    ctx.fillText('Route:  Toronto → Chicago', 20, 70);
 
-    // Range
-    ctx.fillStyle = '#131a24';
-    ctx.fillRect(395, 80, 170, 100);
-    ctx.strokeRect(395, 80, 170, 100);
-    ctx.fillStyle = '#9ba8b8';
-    ctx.font = 'bold 10px sans-serif';
-    ctx.fillText('RANGE', 408, 100);
-    ctx.fillStyle = '#3d82ff';
-    ctx.font = '600 44px "Space Grotesk", sans-serif';
-    ctx.fillText(String(t.range), 408, 155);
+    // ── Vehicle status tiles ──
+    const fuelCol = t.battery > 25 ? '#2fd79b' : t.battery > 12 ? '#ffb224' : '#ff5470';
+    const tiles: { label: string; val: string; unit?: string; color: string; big: boolean }[] = [
+      { label: 'SPEED', val: String(t.speed), unit: 'mph', color: '#34e0e8', big: true },
+      { label: 'FUEL', val: `${t.battery}%`, color: fuelCol, big: true },
+      { label: 'ENGINE', val: 'NORMAL', color: '#2fd79b', big: false },
+      { label: 'BATTERY', val: '14.2V', color: '#2fd79b', big: false },
+    ];
+    const tw = 127, tg = 10, ty = 84, th = 78;
+    tiles.forEach((tl, i) => {
+      const x = 20 + i * (tw + tg);
+      panel(x, ty, tw, th);
+      label(tl.label, x + 12, ty + 22);
+      ctx.fillStyle = tl.color;
+      ctx.font = `600 ${tl.big ? 34 : 24}px "Space Grotesk", sans-serif`;
+      ctx.fillText(tl.val, x + 12, ty + 60);
+      if (tl.unit) {
+        const vw = ctx.measureText(tl.val).width;
+        ctx.fillStyle = '#5e6b7c';
+        ctx.font = '13px sans-serif';
+        ctx.fillText(tl.unit, x + 16 + vw, ty + 60);
+      }
+    });
+
+    // ── Hours of Service ──
+    ctx.fillStyle = '#34e0e8';
+    ctx.font = 'bold 12px sans-serif';
+    ctx.fillText('HOURS OF SERVICE', 20, 190);
+    const hos = [
+      { l: 'DRIVING', v: '6h 42m' }, { l: 'ON DUTY', v: '8h 15m' },
+      { l: 'BREAK DUE', v: '1h 18m' }, { l: 'CYCLE LEFT', v: '21h 40m' },
+    ];
+    panel(20, 200, W - 40, 62);
+    hos.forEach((h, i) => {
+      const x = 34 + i * ((W - 68) / 4);
+      label(h.l, x, 222);
+      ctx.fillStyle = '#eaf1f7';
+      ctx.font = '600 22px "Space Grotesk", sans-serif';
+      ctx.fillText(h.v, x, 250);
+    });
+
+    // ── Active Alerts ──
+    ctx.fillStyle = '#ff5470';
+    ctx.font = 'bold 12px sans-serif';
+    ctx.fillText('ACTIVE ALERTS  (4)', 20, 288);
+    const alerts = [
+      'Break required in 1h 18m',
+      'Pre-trip inspection pending for next shift',
+      'Low tire pressure — trailer axle 2',
+      'Weigh station ahead in 18 mi',
+    ];
+    ctx.font = '13px sans-serif';
+    alerts.forEach((a, i) => {
+      const y = 308 + i * 21;
+      ctx.fillStyle = '#ffb224';
+      ctx.fillText('▲', 24, y);
+      ctx.fillStyle = '#c8d2dc';
+      ctx.fillText(a, 42, y);
+    });
+
+    // ── Footer status strip (live context) ──
+    panel(20, 400, W - 40, 26);
     ctx.fillStyle = '#5e6b7c';
-    ctx.font = '12px sans-serif';
-    ctx.fillText('km', 500, 155);
-
-    // Perception
-    ctx.fillStyle = '#0d1219';
-    ctx.fillRect(25, 200, 540, 180);
-    ctx.strokeRect(25, 200, 540, 180);
-
-    ctx.strokeStyle = '#34e0e8';
-    ctx.lineWidth = 2;
-    ctx.setLineDash([12, 8]);
-    ctx.beginPath(); ctx.moveTo(180, 370); ctx.lineTo(260, 210); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(400, 370); ctx.lineTo(330, 210); ctx.stroke();
-    ctx.setLineDash([]);
-
-    ctx.strokeStyle = '#ffb224';
-    ctx.lineWidth = 1.5;
-    ctx.strokeRect(265, 250, 60, 50);
-    ctx.fillStyle = '#ffb224';
-    ctx.font = 'bold 9px monospace';
-    ctx.fillText('VEHICLE 14.2m', 270, 265);
-
-    ctx.fillStyle = '#131a24';
-    ctx.fillRect(25, 395, 540, 25);
-    ctx.fillStyle = '#5e6b7c';
-    ctx.font = '10px monospace';
-    ctx.fillText(`MEDIA: "${t.musicTrack}" | HMI: OK | GENIE: LIVE`, 35, 412);
+    ctx.font = '11px monospace';
+    ctx.fillText(
+      `GEAR ${t.gear}  ·  ADAS ${t.engaged ? 'ON' : 'STANDBY'}  ·  CABIN ${t.temp}°C  ·  NEXT WAYPOINT 18mi (Detroit)  ·  GENIE LIVE`,
+      30, 417,
+    );
   };
 
   const sendScreenFrame = () => {
     const canvas = canvasRef.current;
     if (!canvas || !ws.current || ws.current.readyState !== WebSocket.OPEN) return;
     drawTelemetryCanvas();
-    const base64 = canvas.toDataURL('image/jpeg', 0.55).split(',')[1];
+    const base64 = canvas.toDataURL('image/jpeg', 0.7).split(',')[1];
     ws.current.send(JSON.stringify({
       realtimeInput: { video: { mimeType: 'image/jpeg', data: base64 } },
     }));
   };
+
+  // Push a fresh frame the instant the screen changes (debounced), so Genie sees
+  // the live dashboard in near real-time instead of waiting for the heartbeat tick.
+  useEffect(() => {
+    if (!connected) return;
+    const id = window.setTimeout(() => sendScreenFrame(), 200);
+    return () => window.clearTimeout(id);
+  }, [speed, battery, range, engaged, gear, temp, musicTrack, connected]);
 
   // Commit the in-progress Genie reply to the dialog log, then clear the buffer.
   const flushGenie = (suffix = '') => {
@@ -424,7 +451,8 @@ export function VoiceAssistant({
       setStatus('ready');
       setErrorMsg('');
       sendScreenFrame();
-      screenInterval.current = window.setInterval(sendScreenFrame, 1500);
+      // Heartbeat frame so the model always has a recent view even when idle.
+      screenInterval.current = window.setInterval(sendScreenFrame, 1000);
       if (!isMuted) startRecording();
     };
 
